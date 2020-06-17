@@ -1,0 +1,10 @@
+name = "FiniteGroups"
+uuid = "d3b5a148-6e59-4e52-9b1e-59b628f151f7"
+authors = ["Lucas Rademaker <lr4d@users.noreply.github.com>"]
+version = "0.1.0"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
