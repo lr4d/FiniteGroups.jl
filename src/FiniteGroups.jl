@@ -11,7 +11,7 @@ abstract type AbstractGroup end
 struct Groupoid{T} <: AbstractGroup
     set::Set{T}
     operation::Function
-end   
+end
 
 """
     Group.
@@ -99,7 +99,7 @@ end
 
 
 function assert_closure(set::Set, closed_in_set::Set, operation::Function)::Nothing
-    # We only check left closure. 
+    # We only check left closure.
     @assert set_composition(set, closed_in_set, operation) ⊆ closed_in_set
 end
 
@@ -238,16 +238,16 @@ function find_generators(group::AbstractGroup)::Set
     filter(g->generate_subgroup(group, g) == group, group.set)
 end
 
-function cayley_table(group::AbstractGroup) # TODO: move to utils
+function _cayley_table(group::AbstractGroup) # TODO: move to utils
     elements = [x for x in group.set]
-    inside = map(x-> 
+    inside = map(x->
             map(y->group.operation(x, y),
             elements
             ), elements)
-    
+
     return elements, inside
 end
-# cayley_table((generate_subgroup(G, 6) |> quotient_group))[2]
+# _cayley_table((generate_subgroup(G, 6) |> quotient_group))[2]
 
 
 """
@@ -264,7 +264,7 @@ Return { gxg⁻¹: ∀g ∈ G}
 """
 function conjugacy_class(group::AbstractGroup, x)::Set
     Set(conjugate(group, x, g) for g in group)
-end 
+end
 
 """
 Return the distinct conjugacy classes in `group`.
@@ -286,11 +286,6 @@ function inv(group::AbstractGroup, x)
     end
     return missing  # TODO: missing or nothing?
 end
-
-
-×₇(x, y) = mod(x * y, 7)
-G = Group(Set([1 2 3 4 5 6]), ×₇)
-conjugacy_class(G, 3)
 
 abstract type AbstractHomomorphism end
 """
@@ -402,14 +397,14 @@ end
 function GroupAction(group::Group{<:T}, set::Set{<:T}, action::Function)::GroupAction{T} where {T}
     ga = _GroupActionLike(group, set, action)
     assert_closure(ga)
-    
+
     e = get_identity_element(ga.group)
     for x in ga.set
         @assert ga.action(e, x) == x
     end
-    
+
     _assert_homomorphism_property(ga)
-    
+
     return GroupAction{T}(group, set, action)
 end
 
